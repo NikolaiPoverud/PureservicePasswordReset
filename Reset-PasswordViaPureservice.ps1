@@ -4,10 +4,11 @@
 
 $Version = "1.0"
 
-$versionCheck = Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/ResetADPassword.ps1" -UseBasicParsing
+$versionCheck = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/version.json" -UseBasicParsing
 
-if($versioncheck -contains "`$Vers")
-
+if($Version -ne $versionCheck){
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/ResetADPassword.ps1" -OutFile "C:\Pureservice\ResetADPassword.ps1"
+}
 
 
 if ($ticketNumber) {
