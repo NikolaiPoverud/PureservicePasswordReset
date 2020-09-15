@@ -1,7 +1,4 @@
-﻿Param(
-    [string]$ticketNumber
-)
-
+$Version = "1.0"
 
 function Create-RandomPassword {
     $Liste1 = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Liste1.txt" -UseBasicParsing).ToString()
@@ -118,6 +115,5 @@ else {
 
     pause
 }
-
 
 
