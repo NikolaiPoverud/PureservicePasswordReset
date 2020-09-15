@@ -10,11 +10,13 @@ if ($Version -ne $versionCheck) {
     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/ResetADPassword.ps1" -OutFile "C:\Github\PureservicePasswordReset\ResetADPassword.ps1"
 }
 
+$Path = "C:\Pureservice"
+
 if ($ticketNumber) {
-    .\ResetADPassword.ps1 -ticketnumber $ticketnumber
+    Start-Process "powershell.exe" -ArgumentList "-file $Path\ResetADPassword.ps1 -ticketNumber $ticketNumber" 
 }
 else {
-    .\ResetADPassword.ps1
+    Start-Process "powershell.exe" -ArgumentList "-file $Path\ResetADPassword.ps1"
 }
 
 
