@@ -2,7 +2,7 @@
     [string]$ticketNumber
 )
 
-$Version = 1.0
+$Version = 1.1
 
 $versionCheck = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/version.json" -UseBasicParsing
 
