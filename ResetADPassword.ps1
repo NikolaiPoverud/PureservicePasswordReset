@@ -1,3 +1,5 @@
+$Version = 1.0
+
 function Create-RandomPassword {
     $Liste1 = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Liste1.txt" -UseBasicParsing).ToString()
     $Liste1 = $Liste1 -split '[\r\n]'
