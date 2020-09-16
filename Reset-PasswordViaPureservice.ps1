@@ -11,11 +11,12 @@ Start-Sleep 2
 if ($Version -ne $versionCheck) {
     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/ResetADPassword.ps1" -OutFile "C:\Pureservice\ResetADPassword.ps1"
     Write-Host "Ny versjon er $Versioncheck... Oppdaterer scriptet"
-    Start-Sleep 2
+    Start-Sleep 1
 
 }
-else{
+else {
     Write-Host "Du er allerede på nyeste versjon..."
+    Start-Sleep 1
 }
 
 $Path = "C:\Pureservice"
