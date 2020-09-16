@@ -1,4 +1,4 @@
-Param(
+﻿Param(
     [string]$ticketNumber
 )
 
@@ -61,7 +61,7 @@ if ($ticketnumber) {
 
     $pw = Create-RandomPassword
 
-
+    
     # Send the command to change password in Active Directory
     Set-ADAccountPassword -Identity $username -NewPassword (ConvertTo-SecureString -AsPlainText "$pw" -Force) -Reset 
   
@@ -74,8 +74,9 @@ if ($ticketnumber) {
                 description     = $ticketQuery.tickets.description
                 solution        = "Passordet for bruker med brukernavn $username er satt til '$pw' og endres ved første pålogging.
 
-            Visste du at man kan resette sitt eget passord dersom man har lagret mobilnummeret sitt i HR-systemet? Da skriver man en SMS: HRTPASS og sender til $($config.resetNumber). Da vil man få nytt passord på SMS.
-            Pass derfor på å ha riktig informasjon i HR-systemet. Man kan sjekke sine egne opplysninger på $($config.linktoHR) (denne finner man også på skrivebordet og på selvbetjening på intranett - HR Web)"
+                Visste du at man kan resette sitt eget passord dersom man har lagret mobilnummeret sitt i HR-systemet? Da skriver man en SMS: HRTPASS og sender til 26112. Da vil man få nytt passord på SMS.
+                Pass derfor på å ha riktig informasjon i HR-systemet. Man kan sjekke sine egne opplysninger på https://isubw-web.intern.i-sone.no/BW_Prod_Web/default.aspx (denne finner man også på skrivebordet og på selvbetjening på intranett - HR Web)"
+            
                 assignedTeamId  = 1 
                 assignedAgentId = $Agent.id
                 resolvedbyId    = $ticketQuery.tickets.assignedAgentId
@@ -91,10 +92,11 @@ if ($ticketnumber) {
                 } 
             }
         )
-    }
+    } | convertto-json -depth 4
 
 
-    Invoke-RestMethod -uri "$Baseuri/api/ticket/$ticketID" -Headers $headers  -Body (ConvertTo-Json $CloseBody -Depth 4) -Method Put -ContentType $content
+
+    Invoke-RestMethod -uri "$Baseuri/api/ticket/$ticketID" -Headers $headers  -Body ([System.Text.Encoding]::UTF8.GetBytes($CloseBody))  -Method Put -ContentType $content
 
 }
 else {
