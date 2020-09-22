@@ -2,7 +2,6 @@
     [string]$ticketNumber
 )
 
-$Version = 1.2
 
 function Create-RandomPassword {
     $Liste1 = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Liste1.txt" -UseBasicParsing).ToString()
@@ -25,6 +24,24 @@ function Create-RandomPassword {
 
 ##Config stuff
 $config = Get-Content C:\Pureservice\config.json | convertfrom-json
+
+
+$Version = 1.3
+$versionCheck = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/version.json" -UseBasicParsing
+Write-Host "Sjekker versjonsnummer... Du kjører versjon $Version..."
+Start-Sleep 1
+if ($Version -eq $versionCheck) {
+    Write-Host "Du er allerede på nyeste versjon... Fortsetter"
+    Start-Sleep 1 
+}
+else {
+    Write-Host "Ny versjon er $Versioncheck... Oppdaterer scriptet"
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Reset-PasswordViaPureservice.ps1" -OutFile "C:\Pureservice\Reset-PasswordViaPureservice.ps1" -UseBasicParsing
+   
+    Start-Process "powershell.exe" -ArgumentList "-File `"C:\Pureservice\Reset-PasswordViaPureservice.ps1`" -ticketnumber $ticketnumber -WaitFor $PID -Cleanup $True"  
+    break
+}
+
 
 if ($ticketnumber) {
 
@@ -98,7 +115,7 @@ if ($ticketnumber) {
 
     Invoke-RestMethod -uri "$Baseuri/api/ticket/$ticketID" -Headers $headers  -Body ([System.Text.Encoding]::UTF8.GetBytes($CloseBody))  -Method Put -ContentType $content
     $update = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/version.json" -UseBasicParsing
-    if($update -ne $Version){
+    if ($update -ne $Version) {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Reset-PasswordViaPureservice.ps1" -OutFile "C:\Pureservice\Reset-PasswordViaPureservice.ps1" -UseBasicParsing
         Write-Host "Oppdaterer hovedscript til $update"
     }
@@ -124,7 +141,7 @@ else {
     Write-Host "Passord satt til: '$pw'"
 
     $update = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/version.json" -UseBasicParsing
-    if($update -ne $Version){
+    if ($update -ne $Version) {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Reset-PasswordViaPureservice.ps1" -OutFile "C:\Pureservice\Reset-PasswordViaPureservice.ps1" -UseBasicParsing
         Write-Host "Oppdaterer hovedscript til $update"
     }
