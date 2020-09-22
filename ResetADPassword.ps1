@@ -26,7 +26,7 @@ function Create-RandomPassword {
 $config = Get-Content C:\Pureservice\config.json | convertfrom-json
 
 write-host $pid
-$Version = 1.3
+$Version = 1.2
 $versionCheck = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/version.json" -UseBasicParsing
 Write-Host "Sjekker versjonsnummer... Du kjører versjon $Version..."
 Start-Sleep 1
@@ -37,7 +37,7 @@ if ($Version -eq $versionCheck) {
 else {
     Write-Host "Ny versjon er $Versioncheck... Oppdaterer scriptet"
     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Reset-PasswordViaPureservice.ps1" -OutFile "C:\Pureservice\Reset-PasswordViaPureservice.ps1" -UseBasicParsing
-    Start-Process "powershell.exe" -ArgumentList "-File `"C:\Pureservice\Reset-PasswordViaPureservice.ps1`" -ticketnumber $ticketnumber -WaitFor $pid"  
+    Start-Process "powershell.exe" -ArgumentList "-File `"C:\Pureservice\Reset-PasswordViaPureservice.ps1`" -ticketnumber $ticketnumber -Wait Pid"  
     break
 }
 
