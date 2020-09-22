@@ -97,7 +97,11 @@ if ($ticketnumber) {
 
 
     Invoke-RestMethod -uri "$Baseuri/api/ticket/$ticketID" -Headers $headers  -Body ([System.Text.Encoding]::UTF8.GetBytes($CloseBody))  -Method Put -ContentType $content
-
+    $update = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/version.json" -UseBasicParsing
+    if($update -ne $Version){
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Reset-PasswordViaPureservice.ps1" -OutFile "C:\Pureservice\Reset-PasswordViaPureservice.ps1" -UseBasicParsing
+        Write-Host "Oppdaterer hovedscript til $update"
+    }
 }
 else {
     $UserName = Read-Host "Please specify users username"
@@ -119,11 +123,10 @@ else {
 
     Write-Host "Passord satt til: '$pw'"
 
-    pause
+    $update = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/version.json" -UseBasicParsing
+    if($update -ne $Version){
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Reset-PasswordViaPureservice.ps1" -OutFile "C:\Pureservice\Reset-PasswordViaPureservice.ps1" -UseBasicParsing
+        Write-Host "Oppdaterer hovedscript til $update"
+    }
 }
 
-$update = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/version.json" -UseBasicParsing
-if($update -ne $Version){
-    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Reset-PasswordViaPureservice.ps1" -OutFile "C:\Pureservice\Reset-PasswordViaPureservice.ps1" -UseBasicParsing
-    Write-Host "Oppdaterer hovedscript til $update"
-}
