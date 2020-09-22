@@ -125,4 +125,5 @@ else {
 $update = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/version.json" -UseBasicParsing
 if($update -ne $Version){
     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Reset-PasswordViaPureservice.ps1" -OutFile "C:\Pureservice\Reset-PasswordViaPureservice.ps1" -UseBasicParsing
+    Write-Host "Oppdaterer hovedscript til $update"
 }
