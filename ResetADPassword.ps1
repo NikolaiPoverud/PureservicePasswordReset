@@ -2,7 +2,7 @@
     [string]$ticketNumber
 )
 
-$Version = 1.1
+$Version = 1.2
 
 function Create-RandomPassword {
     $Liste1 = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Liste1.txt" -UseBasicParsing).ToString()
@@ -72,7 +72,7 @@ if ($ticketnumber) {
                 id              = $ticketID
                 subject         = $ticketQuery.tickets.subject
                 description     = $ticketQuery.tickets.description
-                solution        = "Passordet for bruker med brukernavn $username er satt til '$pw' og endres ved første pålogging.
+                solution        = "Passordet for bruker med brukernavn $username er satt til '$pw' og endres ved første pålogging. NB! Nytt passordkrav er på 16 tegn. 
 
                 Visste du at man kan resette sitt eget passord dersom man har lagret mobilnummeret sitt i HR-systemet? Da skriver man en SMS: HRTPASS og sender til 26112. Da vil man få nytt passord på SMS.
                 Pass derfor på å ha riktig informasjon i HR-systemet. Man kan sjekke sine egne opplysninger på https://isubw-web.intern.i-sone.no/BW_Prod_Web/default.aspx (denne finner man også på skrivebordet og på selvbetjening på intranett - HR Web)"
@@ -122,4 +122,7 @@ else {
     pause
 }
 
-
+$update = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/version.json" -UseBasicParsing
+if($update -ne $Version){
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Reset-PasswordViaPureservice.ps1" -OutFile "C:\Pureservice\Reset-PasswordViaPureservice.ps1" -UseBasicParsing
+}
