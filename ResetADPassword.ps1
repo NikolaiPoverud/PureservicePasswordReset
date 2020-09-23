@@ -37,13 +37,13 @@ if ($Version -eq $versionCheck) {
 else {
     Write-Host "Ny versjon er $Versioncheck... Oppdaterer scriptet"
     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Reset-PasswordViaPureservice.ps1" -OutFile "C:\Pureservice\Reset-PasswordViaPureservice.ps1" -UseBasicParsing
-    Start-Process "powershell.exe" -ArgumentList "-File `"C:\Pureservice\Reset-PasswordViaPureservice.ps1`" -ticketnumber $ticketnumber -Wait Pid"  
+    Start-Process "powershell.exe" -ArgumentList "-File `"C:\Pureservice\Reset-PasswordViaPureservice.ps1`" -ticketnumber $ticketnumber -WaitFor $pid -Cleanup $true"  
+    Start-Sleep 4
     break
 }
 
 
 if ($ticketnumber) {
-
     
     $baseUri = $Config.baseUri 
     $apiKey = $config.apiKey
@@ -119,7 +119,7 @@ else {
     $userObj = Get-ADUser -Filter { SamAccountName -eq $UserName } -Properties mail
     $userName = $userObj.SamAccountName
     $enabled = $userObj.enabled
-    $mail = $userObj.mail
+
 
     if ($enabled -eq $false) {
         Unlock-ADAccount -Identity $userObj
