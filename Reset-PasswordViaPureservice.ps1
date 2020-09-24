@@ -1,5 +1,5 @@
 ﻿Param(
-    [string]$ticketNumber,
+    $ticketNumber,
     $WaitFor
 )
 
