@@ -4,7 +4,7 @@
     $Cleanup
 )
 
-if (!($Waitfor -eq $null)) {
+if (!($WaitFor -eq $null)) {
     Do {
         $proc = Get-Process -Id $WaitFor
     }
