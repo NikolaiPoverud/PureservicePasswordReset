@@ -13,7 +13,7 @@ if (!($Waitfor -eq $null)) {
 
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/ResetADPassword.ps1" -OutFile "C:\Pureservice\ResetADPassword.ps1" -UseBasicParsing
 
-
+Start-Sleep 2
 $Path = "C:\Pureservice"
 
 if ($ticketNumber) {
