@@ -58,9 +58,10 @@ if ($ticketnumber) {
 
     # Get User from Active Directory
     $UserName = Read-Host "Please specify users username"
-    $userObj = Get-ADUser -Filter { SamAccountName -eq $UserName } -Properties mail
+    $userObj = Get-ADUser -Filter { SamAccountName -eq $UserName } -Properties mail, LockedOut
     $userName = $userObj.SamAccountName
-    $enabled = $userObj.enabled
+    Unlock-ADAccount -Identity $userObj
+
 
     # Get ticket info
     $ticketUri = "$baseUri/api/ticket?filter=requestNumber=$ticketNumber"
@@ -70,16 +71,10 @@ if ($ticketnumber) {
     #Get agent to assign ticket
     $AdSearch = Get-ADUser -Filter "SamAccountName -eq '$env:USERNAME'" -pr cn, displayName
     $GetAgents = invoke-restmethod -uri "$BaseUri/api/user/?filter=$($config.pureserviceFilter)" -headers $headers | Select-Object -ExpandProperty users | Select-Object fullName, id
-    $Agent = $GetAgents | Where-Object { $_.fullName -contains $AdSearch.displayName } | select id
-
-
-    if ($enabled -eq $false) {
-        Unlock-ADAccount -Identity $userObj
-    }
+    $Agent = $GetAgents | Where-Object { $_.fullName -contains $AdSearch.displayName } | Select-Object id
 
     $pw = Create-RandomPassword
 
-    
     # Send the command to change password in Active Directory
     Set-ADAccountPassword -Identity $username -NewPassword (ConvertTo-SecureString -AsPlainText "$pw" -Force) -Reset 
   
