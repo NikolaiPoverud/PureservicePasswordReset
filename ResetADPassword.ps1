@@ -25,7 +25,7 @@ function Create-RandomPassword {
 ##Config stuff
 $config = Get-Content C:\Pureservice\config.json | convertfrom-json
 
-$Version = 1.4
+$Version = 1.5
 $versionCheck = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/version.json" -UseBasicParsing
 Write-Host "Sjekker versjonsnummer... Du kjører versjon $Version..."
 
@@ -114,14 +114,9 @@ if ($ticketnumber) {
 }
 else {
     $UserName = Read-Host "Please specify users username"
-    $userObj = Get-ADUser -Filter { SamAccountName -eq $UserName } -Properties mail
+    $userObj = Get-ADUser -Filter { SamAccountName -eq $UserName } -Properties mail, LockedOut
     $userName = $userObj.SamAccountName
-    $enabled = $userObj.enabled
-
-
-    if ($enabled -eq $false) {
-        Unlock-ADAccount -Identity $userObj
-    }
+    Unlock-ADAccount -Identity $userObj
 
     $pw = Create-RandomPassword
     Set-ADAccountPassword -Identity $userobj -NewPassword (ConvertTo-SecureString -AsPlainText "$pw" -Force) -Reset 
