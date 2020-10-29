@@ -34,7 +34,7 @@ if ($Version -eq $versionCheck) {
 }
 else {
     Write-Host "Ny versjon er $Versioncheck... Oppdaterer scriptet"
-    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Reset-PasswordViaPureservice.ps1" -OutFile "C:\Pureservice\Reset-PasswordViaPureservice.ps1" -UseBasicParsing
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Hortenkommune/Pureservice-Password-Reset/master/Reset-PasswordViaPureservice.ps1" -OutFile "C:\Pureservice\Reset-PasswordViaPureservice.ps1" -UseBasicParsing
     Start-Sleep 1
     if ($ticketnumber) {
         Start-Process "powershell.exe" -ArgumentList "-File `"C:\Pureservice\Reset-PasswordViaPureservice.ps1`" -WaitFor $PID -ticketNumber $ticketnumber"
