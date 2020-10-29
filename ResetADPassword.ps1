@@ -4,11 +4,11 @@
 
 
 function Create-RandomPassword {
-    $Liste1 = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Liste1.txt" -UseBasicParsing).ToString()
+    $Liste1 = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Pronomen.txt" -UseBasicParsing).ToString()
     $Liste1 = $Liste1 -split '[\r\n]'
-    $Liste2 = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Liste2.txt" -UseBasicParsing).ToString()
+    $Liste2 = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Verb.txt" -UseBasicParsing).ToString()
     $Liste2 = $Liste2 -split '[\r\n]'
-    $Liste3 = (Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/liste.txt" -UseBasicParsing).ToString()
+    $Liste3 = (Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Byer.txt" -UseBasicParsing).ToString()
     $Liste3 = $Liste3 -split '[\r\n]'
     $Word1 = $Liste1 | Sort-Object { Get-Random } -Unique | Select-Object -first 1
     $Word2 = $Liste2 | Sort-Object { Get-random } -Unique | Select-Object -first 1
@@ -25,7 +25,7 @@ function Create-RandomPassword {
 ##Config stuff
 $config = Get-Content C:\Pureservice\config.json | convertfrom-json
 
-$Version = 1.5
+$Version = 1.6
 $versionCheck = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/version.json" -UseBasicParsing
 Write-Host "Sjekker versjonsnummer... Du kjører versjon $Version..."
 
