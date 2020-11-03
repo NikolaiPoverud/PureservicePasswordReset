@@ -4,11 +4,11 @@
 
 
 function Create-RandomPassword {
-    $Liste1 = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Pronomen.txt" -UseBasicParsing).ToString()
+    $Liste1 = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Hortenkommune/Pureservice-Password-Reset/master/Pronomen.txt" -UseBasicParsing).ToString()
     $Liste1 = $Liste1 -split '[\r\n]'
-    $Liste2 = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Verb.txt" -UseBasicParsing).ToString()
+    $Liste2 = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Hortenkommune/Pureservice-Password-Reset/master/Verb.txt" -UseBasicParsing).ToString()
     $Liste2 = $Liste2 -split '[\r\n]'
-    $Liste3 = (Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/Byer.txt" -UseBasicParsing).ToString()
+    $Liste3 = (Invoke-RestMethod -Uri "https://raw.githubusercontent.com/Hortenkommune/Pureservice-Password-Reset/master/Byer.txt" -UseBasicParsing).ToString()
     $Liste3 = $Liste3 -split '[\r\n]'
     $Word1 = $Liste1 | Sort-Object { Get-Random } -Unique | Select-Object -first 1
     $Word2 = $Liste2 | Sort-Object { Get-random } -Unique | Select-Object -first 1
@@ -25,9 +25,15 @@ function Create-RandomPassword {
 ##Config stuff
 $config = Get-Content C:\Pureservice\config.json | convertfrom-json
 
-$Version = 1.6
-$versionCheck = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/NikolaiPoverud/PureservicePasswordReset/master/version.json" -UseBasicParsing
+$Version = 1.7
+$versionCheck = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/Hortenkommune/Pureservice-Password-Reset/master/version.json" -UseBasicParsing
 Write-Host "Sjekker versjonsnummer... Du kjører versjon $Version..."
+
+#added cleanup
+If(Test-Path C:\Pureservice\Reset-PasswordViaPureservice.ps1){
+    Remove-Item -Path C:\Pureservice\Reset-PasswordViaPureservice.ps1
+    write-host "Dette virker"
+}
 
 if ($Version -eq $versionCheck) {
     Write-Host "Du er allerede på nyeste versjon... Fortsetter"
@@ -57,7 +63,7 @@ if ($ticketnumber) {
   
 
     # Get User from Active Directory
-    $UserName = Read-Host "Please specify users username"
+    $UserName = Read-Host "Vennligst spesifiser brukernavn"
     $userObj = Get-ADUser -Filter { SamAccountName -eq $UserName } -Properties mail, LockedOut
     $userName = $userObj.SamAccountName
     Unlock-ADAccount -Identity $userObj
@@ -87,8 +93,8 @@ if ($ticketnumber) {
                 description     = $ticketQuery.tickets.description
                 solution        = "Passordet for bruker med brukernavn $username er satt til '$pw' og endres ved første pålogging. NB! Nytt passordkrav er på 16 tegn. 
 
-                Visste du at man kan resette sitt eget passord dersom man har lagret mobilnummeret sitt i HR-systemet? Da skriver man en SMS: HRTPASS og sender til 26112. Da vil man få nytt passord på SMS.
-                Pass derfor på å ha riktig informasjon i HR-systemet. Man kan sjekke sine egne opplysninger på https://isubw-web.intern.i-sone.no/BW_Prod_Web/default.aspx (denne finner man også på skrivebordet og på selvbetjening på intranett - HR Web)"
+                Visste du at man kan resette sitt eget passord dersom man har lagret mobilnummeret sitt i HR-systemet? Da skriver man en SMS: HRTPASS og sender til $($config.resetNumber). Da vil man få nytt passord på SMS.
+                Pass derfor på å ha riktig informasjon i HR-systemet. Man kan sjekke sine egne opplysninger på $($config.linktoHR) (denne finner man også på skrivebordet og på selvbetjening på intranett - HR Web)"
             
                 assignedTeamId  = 1 
                 assignedAgentId = $Agent.id
@@ -113,7 +119,7 @@ if ($ticketnumber) {
     
 }
 else {
-    $UserName = Read-Host "Please specify users username"
+    $UserName = Read-Host "Vennligst spesifiser brukernavn"
     $userObj = Get-ADUser -Filter { SamAccountName -eq $UserName } -Properties mail, LockedOut
     $userName = $userObj.SamAccountName
     Unlock-ADAccount -Identity $userObj
@@ -125,7 +131,7 @@ else {
         Unlock-ADAccount -Identity $userObj
     }
 
-    Write-Host "Passord satt til: '$pw'"
+    Write-Host "Passord satt til: $pw"
 
     pause
 }
